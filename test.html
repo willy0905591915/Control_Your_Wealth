@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <form id="testForm">
+      <label>Input: </label>
+      <input id="value1" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const testForm = document.getElementById("testForm");
+        testForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const value1 = document.getElementById("value1").value;
+          const testUrl =
+            "https://gk8v06fere.execute-api.us-east-1.amazonaws.com/dev/test";
+          try {
+            const idToken = sessionStorage.getItem("idToken");
+            console.log(idToken);
+            axios
+              .get(testUrl, {
+                headers: { Authorization: `Bearer ${idToken}` },
+                params: {
+                  value1: value1,
+                },
+              })
+              .then((response) => {
+                alert("Response from server: " + response.data.message);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          } catch (error) {
+            alert("No id token!");
+            console.error(error.message);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
